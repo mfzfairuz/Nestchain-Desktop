@@ -28,6 +28,6 @@
     "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": false, "language": "1057", "shortcutName": "Nestchain ERP" },
     "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }, { "target": "zip", "arch": ["universal"] }], "icon": "build/icon.png", "category": "public.app-category.business", "artifactName": "Nestchain-${version}-${arch}.${ext}", "hardenedRuntime": true, "gatekeeperAssess": false },
     "dmg": { "artifactName": "Nestchain-${version}.${ext}" },
-    "publish": { "provider": "github", "owner": "mfzfairuz", "repo": "Nestchain-Desktop" }
+    "publish": { "provider": "github", "owner": "mfzfairuz", "repo": "Nestchain-Desktop", "releaseType": "release" }
   }
 }
