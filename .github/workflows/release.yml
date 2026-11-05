@@ -1,8 +1,10 @@
 # Bangun installer Windows (NestchainSetup-x.y.z.exe) dan Mac (Nestchain-x.y.z.dmg) lalu terbitkan ke
 # GitHub Releases setiap kali ada tag v*, misalnya: git tag v0.1.0 && git push origin v0.1.0
 # electron-updater membaca latest.yml / latest-mac.yml dari release itu untuk pembaruan otomatis.
-# Tanda tangan kode (opsional): Windows lewat Azure Trusted Signing, Mac lewat CSC_LINK/CSC_KEY_PASSWORD
-# dan APPLE_ID/APPLE_APP_SPECIFIC_PASSWORD/APPLE_TEAM_ID untuk notarisasi.
+#
+# Tanda tangan kode belum dipasang. Saat akun Apple Developer dan sertifikat sudah ada, tambahkan
+# rahasia repo CSC_LINK, CSC_KEY_PASSWORD, APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD, APPLE_TEAM_ID dan
+# teruskan ke env langkah Mac; jangan meneruskan variabel kosong karena electron-builder membacanya sebagai berkas.
 name: Rilis desktop
 
 on:
@@ -27,12 +29,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Bangun dan terbitkan
-        run: npx electron-builder --publish always ${{ matrix.os == 'macos-latest' && '--mac' || '--win nsis' }}
+      - name: Bangun dan terbitkan (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npx electron-builder --win nsis --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      - name: Bangun dan terbitkan (Mac, tanpa tanda tangan)
+        if: matrix.os == 'macos-latest'
+        run: npx electron-builder --mac --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
