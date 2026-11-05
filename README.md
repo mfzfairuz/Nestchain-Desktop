@@ -1,5 +1,8 @@
 # Nestchain Desktop
 
+Hak cipta PT Lentera Alam Nusantara, semua hak dilindungi (lihat LICENSE). Repo ini publik hanya supaya
+installer dan pembaruan otomatis bisa diunduh; kode ERP-nya sendiri tidak ada di sini.
+
 Aplikasi desktop Nestchain ERP untuk Windows (.exe) dan Mac (.dmg). Dibuat dengan Electron: jendela aplikasi
 yang membuka instalasi Nestchain milik perusahaan (`<kode>.nestchain.id`). Data tetap di server Nestchain;
 aplikasi ini menyediakan ikon di desktop, layar penuh untuk tablet stasiun, menu bahasa Indonesia, dan
