@@ -1,13 +1,15 @@
 {
-  "name": "nestchain-desktop-electron",
+  "name": "nestchain-desktop",
   "version": "0.1.0",
   "private": true,
-  "description": "Nestchain ERP desktop, versi Electron untuk perbandingan dengan versi Tauri",
+  "description": "Aplikasi desktop Nestchain ERP untuk Windows dan Mac (Electron, data tetap di server Nestchain)",
   "main": "main.js",
   "author": "PT Lentera Alam Nusantara",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win nsis"
+    "build": "electron-builder --win nsis",
+    "build:mac": "electron-builder --mac",
+    "pratinjau": "node pratinjau.js"
   },
   "devDependencies": {
     "electron": "^33.2.1",
@@ -17,13 +19,15 @@
     "electron-updater": "^6.3.9"
   },
   "build": {
-    "appId": "id.nestchain.desktop.electron",
-    "productName": "Nestchain ERP Electron",
+    "appId": "id.nestchain.desktop",
+    "productName": "Nestchain ERP",
     "copyright": "PT Lentera Alam Nusantara",
     "directories": { "output": "dist" },
     "files": ["main.js", "preload.js", "src/**/*"],
-    "win": { "target": ["nsis"], "icon": "build/icon.png", "artifactName": "NestchainSetup-Electron-${version}.${ext}" },
-    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": false, "language": "1057" },
-    "publish": { "provider": "github", "owner": "mfzfairuz", "repo": "Nestchain-Desktop-Electron" }
+    "win": { "target": ["nsis"], "icon": "build/icon.png", "artifactName": "NestchainSetup-${version}.${ext}", "publisherName": "PT Lentera Alam Nusantara" },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": false, "language": "1057", "shortcutName": "Nestchain ERP" },
+    "mac": { "target": [{ "target": "dmg", "arch": ["universal"] }, { "target": "zip", "arch": ["universal"] }], "icon": "build/icon.png", "category": "public.app-category.business", "artifactName": "Nestchain-${version}-${arch}.${ext}", "hardenedRuntime": true, "gatekeeperAssess": false },
+    "dmg": { "artifactName": "Nestchain-${version}.${ext}" },
+    "publish": { "provider": "github", "owner": "mfzfairuz", "repo": "Nestchain-Desktop" }
   }
 }

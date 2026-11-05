@@ -1,0 +1,38 @@
+# Bangun installer Windows (NestchainSetup-x.y.z.exe) dan Mac (Nestchain-x.y.z.dmg) lalu terbitkan ke
+# GitHub Releases setiap kali ada tag v*, misalnya: git tag v0.1.0 && git push origin v0.1.0
+# electron-updater membaca latest.yml / latest-mac.yml dari release itu untuk pembaruan otomatis.
+# Tanda tangan kode (opsional): Windows lewat Azure Trusted Signing, Mac lewat CSC_LINK/CSC_KEY_PASSWORD
+# dan APPLE_ID/APPLE_APP_SPECIFIC_PASSWORD/APPLE_TEAM_ID untuk notarisasi.
+name: Rilis desktop
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bangun:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Bangun dan terbitkan
+        run: npx electron-builder --publish always ${{ matrix.os == 'macos-latest' && '--mac' || '--win nsis' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
